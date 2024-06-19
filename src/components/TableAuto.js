@@ -1,4 +1,4 @@
-import { Table } from "react-bootstrap";
+import { Button, Table } from "react-bootstrap";
 
 // const populaLinhas;
 
@@ -15,6 +15,18 @@ export default function TableAuto(props) {
           <td>{item.dataNascimento}</td>
           <td>{item.email}</td>
           <td>{item.telefone}</td>
+          <td>
+            <Button
+              variant="danger"
+              item-id={item.id}
+              onClick={props.handleClickDelete}
+            >
+              Excluir
+            </Button>
+            <Button item-id={item.id} onClick={props.handleClickEdit}>
+              Editar
+            </Button>
+          </td>
         </tr>
       );
     });
@@ -23,7 +35,7 @@ export default function TableAuto(props) {
     <Table striped bordered hover>
       <thead>
         <tr>
-          <th>#</th>
+          <th>ID</th>
           {populaColunas(props.colunasTabela)}
         </tr>
       </thead>
