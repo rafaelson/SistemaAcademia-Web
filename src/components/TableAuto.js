@@ -1,7 +1,5 @@
 import { Button, Table } from "react-bootstrap";
 
-// const populaLinhas;
-
 export default function TableAuto(props) {
   const populaColunas = (cols) => cols.map((col) => <th>{col}</th>);
   const numColunas = props.colunasTabela.length;

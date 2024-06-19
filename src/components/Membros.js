@@ -33,7 +33,16 @@ export default function Membros() {
     setTelefoneValue(e.target.value);
   };
 
-  const handleClick = (e) => {
+  const fetchData = async () => {
+    try {
+      const response = await GetMembros();
+      setData(response.data);
+    } catch (error) {
+      console.error("Erro ao buscar membros:", error);
+    }
+  };
+
+  const handleClick = async (e) => {
     e.preventDefault();
 
     const payload = {
@@ -43,15 +52,26 @@ export default function Membros() {
       telefone: telefoneValue,
     };
 
-    if (edit) {
-      payload.id = membroEditado;
-      PutMembro(payload);
-      setEdit(false);
-    } else {
-      PostMembro(payload);
-    }
+    try {
+      if (edit) {
+        payload.id = membroEditado;
+        await PutMembro(payload);
+        setEdit(false);
+      } else {
+        await PostMembro(payload);
+      }
 
-    console.log(payload);
+      // Clear form fields
+      setNomeValue("");
+      setEmailValue("");
+      setDateValue("");
+      setTelefoneValue("");
+
+      // Fetch updated data
+      fetchData();
+    } catch (error) {
+      console.error("Erro ao salvar membro:", error);
+    }
   };
 
   const handleClickEdit = (e) => {
@@ -68,23 +88,19 @@ export default function Membros() {
     setEdit(true);
   };
 
-  const handleClickDelete = (e) => {
+  const handleClickDelete = async (e) => {
     const membroId = e.target.getAttribute("item-id");
 
-    DeleteMembro(membroId);
+    try {
+      await DeleteMembro(membroId);
+      // Fetch updated data
+      fetchData();
+    } catch (error) {
+      console.error("Erro ao deletar membro:", error);
+    }
   };
 
   useEffect(() => {
-    // Função assíncrona para buscar os dados
-    const fetchData = async () => {
-      try {
-        const response = await GetMembros();
-        setData(response.data);
-      } catch (error) {
-        console.error("Erro ao buscar membros:", error);
-      }
-    };
-
     fetchData();
   }, []);
 
