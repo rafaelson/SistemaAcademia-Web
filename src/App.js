@@ -14,6 +14,8 @@ import {
 } from "react-bootstrap";
 import { useState } from "react";
 import Membros from "./components/Membros";
+import Treinadores from "./components/Treinadores";
+import PlanosTreino from "./components/PlanosTreino";
 
 function App() {
   const [secaoAtual, setSecaoAtual] = useState(0);
@@ -34,14 +36,20 @@ function App() {
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav className="me-auto">
-                <Nav.Link href="#home">Membros</Nav.Link>
-                <Nav.Link href="#link">Planos de Treino</Nav.Link>
-                <Nav.Link href="#link">Treinadores</Nav.Link>
+                <Nav.Link onClick={() => setSecaoAtual(0)}>Membros</Nav.Link>
+                <Nav.Link onClick={() => setSecaoAtual(1)}>
+                  Planos de Treino
+                </Nav.Link>
+                <Nav.Link onClick={() => setSecaoAtual(2)}>
+                  Treinadores
+                </Nav.Link>
               </Nav>
             </Navbar.Collapse>
           </Container>
         </Navbar>
-        <Membros />
+        {secaoAtual === 0 && <Membros />}
+        {secaoAtual === 1 && <PlanosTreino />}
+        {secaoAtual === 2 && <Treinadores />}
       </Stack>
     </>
   );

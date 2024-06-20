@@ -1,32 +1,32 @@
 import { Container, Form, Button, Row, Col } from "react-bootstrap";
 import TableAuto from "./TableAuto";
 import {
-  DeleteMembro,
-  GetMembros,
-  PostMembro,
-  PutMembro,
-} from "../services/serviceMembros";
+  DeleteTreinador,
+  GetTreinadores,
+  PostTreinador,
+  PutTreinador,
+} from "../services/serviceTreinadores";
 import { useState, useEffect } from "react";
 
-export default function Membros() {
+export default function Treinadores() {
   const [data, setData] = useState([]);
   const [edit, setEdit] = useState(false);
-  const [membroEditado, setMembroEditado] = useState(undefined);
+  const [treinadorEditado, setTreinadorEditado] = useState(undefined);
   const [nomeValue, setNomeValue] = useState("");
+  const [dataNascimentoValue, setDataNascimentoValue] = useState("");
   const [emailValue, setEmailValue] = useState("");
-  const [dateValue, setDateValue] = useState("");
   const [telefoneValue, setTelefoneValue] = useState("");
 
   const handleNomeValueChange = (e) => {
     setNomeValue(e.target.value);
   };
 
-  const handleEmailValueChange = (e) => {
-    setEmailValue(e.target.value);
+  const handleDataNascimentoValueChange = (e) => {
+    setDataNascimentoValue(e.target.value);
   };
 
-  const handleDateValueChange = (e) => {
-    setDateValue(e.target.value);
+  const handleEmailValueChange = (e) => {
+    setEmailValue(e.target.value);
   };
 
   const handleTelefoneValueChange = (e) => {
@@ -35,10 +35,10 @@ export default function Membros() {
 
   const fetchData = async () => {
     try {
-      const response = await GetMembros();
+      const response = await GetTreinadores();
       setData(response.data);
     } catch (error) {
-      console.error("Erro ao buscar membros:", error);
+      console.error("Erro ao buscar treinadores:", error);
     }
   };
 
@@ -47,56 +47,56 @@ export default function Membros() {
 
     const payload = {
       nome: nomeValue,
+      dataNascimento: dataNascimentoValue,
       email: emailValue,
-      dataNascimento: dateValue,
       telefone: telefoneValue,
     };
 
     try {
       if (edit) {
-        payload.id = membroEditado;
-        await PutMembro(payload);
+        payload.id = treinadorEditado;
+        await PutTreinador(payload);
         setEdit(false);
       } else {
-        await PostMembro(payload);
+        await PostTreinador(payload);
       }
 
       // Clear form fields
       setNomeValue("");
+      setDataNascimentoValue("");
       setEmailValue("");
-      setDateValue("");
       setTelefoneValue("");
 
       // Fetch updated data
       fetchData();
     } catch (error) {
-      console.error("Erro ao salvar membro:", error);
+      console.error("Erro ao salvar treinador:", error);
     }
   };
 
   const handleClickEdit = (e) => {
-    const membroId = e.target.getAttribute("item-id");
-    const membroEditar = data.find((e) => e.id == membroId);
+    const treinadorId = e.target.getAttribute("item-id");
+    const treinadorEditar = data.find((e) => e.id == treinadorId);
 
-    setMembroEditado(membroId);
+    setTreinadorEditado(treinadorId);
 
-    setNomeValue(membroEditar.nome);
-    setEmailValue(membroEditar.email);
-    setDateValue(membroEditar.dataNascimento);
-    setTelefoneValue(membroEditar.telefone);
+    setNomeValue(treinadorEditar.nome);
+    setDataNascimentoValue(treinadorEditar.dataNascimento);
+    setEmailValue(treinadorEditar.email);
+    setTelefoneValue(treinadorEditar.telefone);
 
     setEdit(true);
   };
 
   const handleClickDelete = async (e) => {
-    const membroId = e.target.getAttribute("item-id");
+    const treinadorId = e.target.getAttribute("item-id");
 
     try {
-      await DeleteMembro(membroId);
+      await DeleteTreinador(treinadorId);
       // Fetch updated data
       fetchData();
     } catch (error) {
-      console.error("Erro ao deletar membro:", error);
+      console.error("Erro ao deletar treinador:", error);
     }
   };
 
@@ -132,22 +132,29 @@ export default function Membros() {
               </Row>
             </Col>
             <Col>
-              <Form.Group className="mb-3" controlId="formBasicDate">
-                <Form.Label>Data de nascimento</Form.Label>
-                <Form.Control
-                  type="date"
-                  value={dateValue}
-                  onChange={handleDateValueChange}
-                />
-              </Form.Group>
-              <Form.Group className="mb-3" controlId="formBasicTelefone">
-                <Form.Label>Telefone</Form.Label>
-                <Form.Control
-                  type="text"
-                  value={telefoneValue}
-                  onChange={handleTelefoneValueChange}
-                />
-              </Form.Group>
+              <Row>
+                <Form.Group
+                  className="mb-3"
+                  controlId="formBasicDataNascimento"
+                >
+                  <Form.Label>Data de Nascimento</Form.Label>
+                  <Form.Control
+                    type="date"
+                    value={dataNascimentoValue}
+                    onChange={handleDataNascimentoValueChange}
+                  />
+                </Form.Group>
+              </Row>
+              <Row>
+                <Form.Group className="mb-3" controlId="formBasicTelefone">
+                  <Form.Label>Telefone</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={telefoneValue}
+                    onChange={handleTelefoneValueChange}
+                  />
+                </Form.Group>
+              </Row>
             </Col>
           </Row>
           <Button
@@ -164,7 +171,7 @@ export default function Membros() {
             onClick={handleClick}
             hidden={edit}
           >
-            Novo membro
+            Novo Treinador
           </Button>
           <TableAuto
             colunasTabela={[
@@ -177,7 +184,7 @@ export default function Membros() {
             membrosAtuais={data}
             handleClickEdit={handleClickEdit}
             handleClickDelete={handleClickDelete}
-            entidade={0}
+            entidade={2}
           />
         </Container>
       </Form>

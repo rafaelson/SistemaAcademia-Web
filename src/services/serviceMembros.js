@@ -18,7 +18,3 @@ export async function PutMembro(Membro) {
 export async function DeleteMembro(id) {
   return await Api.delete(`/api/Membros/${id}`);
 }
-
-// export async function ListarTipos() {
-//   return await Api.get("/Membro/GetTipos");
-// }
